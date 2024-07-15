@@ -1,0 +1,19 @@
+<!-- Views/Message/Index.cshtml -->
+@model IEnumerable<Message>
+
+<h2>Mensagens</h2>
+
+<ul>
+    @foreach (var message in Model)
+    {
+        <li>
+            <strong>@message.User.UserName:</strong> @message.Content <em>(@message.Timestamp)</em>
+        </li>
+    }
+</ul>
+
+<form method="post" action="/Message/Create">
+    <input type="hidden" name="userId" value="1" />
+    <textarea name="content"></textarea>
+    <button type="submit">Enviar</button>
+</form>
