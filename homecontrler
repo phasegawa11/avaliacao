@@ -1,0 +1,45 @@
+using av3.Models;
+using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
+
+namespace av3.Controllers
+{
+    using av3.Views.Data.YourProjectName.Data;
+    // Controllers/MessageController.cs
+    using Microsoft.AspNetCore.Mvc;
+    using System.Linq;
+
+    public class MessageController : Controller
+    {
+        private readonly ApplicationDbContext _context;
+
+        public MessageController(ApplicationDbContext context)
+        {
+            _context = context;
+        }
+
+        [HttpGet]
+        public IActionResult Index()
+        {
+            var messages = _context.Messages.Include(m => m.User).ToList();
+            return View(messages);
+        }
+
+        [HttpPost]
+        public IActionResult Create(string content, int userId)
+        {
+            var message = new Message
+            {
+                Content = content,
+                Timestamp = DateTime.Now,
+                UserId = userId
+            };
+
+            _context.Messages.Add(message);
+            _context.SaveChanges();
+
+            return RedirectToAction("Index");
+        }
+    }
+
+}
